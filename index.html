@@ -23,7 +23,7 @@
         #chat-app {
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            min-height: 100vh;
         }
         
         #chat-container {
@@ -37,7 +37,7 @@
         
         #app-name {
             text-align: center;
-            font-size: 36px;
+            font-size: 24px;
             margin-bottom: 10px;
         }
         /* Message list styles */
@@ -92,6 +92,31 @@
         #sendButton:hover {
             background-color: #2680c1;
         }
+        /* Media queries for responsiveness */
+        
+        @media screen and (max-width: 768px) {
+            #app-name {
+                font-size: 18px;
+            }
+            #chat-container {
+                padding: 10px;
+            }
+            li {
+                padding: 8px;
+            }
+            #input-section {
+                padding: 8px;
+            }
+            #usernameInput,
+            #inputMessage {
+                padding: 8px;
+                font-size: 14px;
+            }
+            #sendButton {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 
@@ -109,9 +134,6 @@
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-        < script src = "/socket.io/socket.io.js" >
-    </script>
     <script>
         const socket = io();
         let username = '';
@@ -134,7 +156,6 @@
             li.textContent = data;
             messages.appendChild(li);
         });
-    </script>
     </script>
 </body>
 
