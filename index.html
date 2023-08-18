@@ -26,6 +26,13 @@
             min-height: 100vh;
         }
         
+        #app-name {
+            text-align: left;
+            font-size: 36px;
+            margin: 20px;
+        }
+        /* Chat container styles */
+        
         #chat-container {
             flex: 1;
             padding: 20px;
@@ -33,12 +40,6 @@
             border-radius: 10px 10px 0 0;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
-        }
-        
-        #app-name {
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 10px;
         }
         /* Message list styles */
         
@@ -58,8 +59,7 @@
         
         #input-section {
             display: flex;
-            flex-direction: column;
-            align-items: stretch;
+            align-items: center;
             padding: 10px;
             background-color: #1f1f1f;
             border-radius: 0 0 10px 10px;
@@ -68,24 +68,25 @@
         
         #usernameInput,
         #inputMessage {
-            padding: 10px;
+            flex: 1;
+            padding: 5px;
             border: 1px solid #444;
             border-radius: 5px;
-            font-size: 16px;
+            font-size: 14px;
             color: #fff;
             background-color: #333;
             outline: none;
         }
         
         #sendButton {
-            padding: 10px;
+            padding: 5px 10px;
             background-color: #3498db;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
+            font-size: 14px;
+            margin-left: 10px;
             transition: background-color 0.2s ease-in-out;
         }
         
@@ -96,7 +97,7 @@
         
         @media screen and (max-width: 768px) {
             #app-name {
-                font-size: 18px;
+                font-size: 24px;
             }
             #chat-container {
                 padding: 10px;
@@ -105,16 +106,19 @@
                 padding: 8px;
             }
             #input-section {
+                flex-direction: column;
+                align-items: stretch;
                 padding: 8px;
             }
             #usernameInput,
             #inputMessage {
-                padding: 8px;
-                font-size: 14px;
+                padding: 5px;
+                font-size: 12px;
+                margin-bottom: 8px;
             }
             #sendButton {
-                padding: 8px;
-                font-size: 14px;
+                padding: 5px 8px;
+                font-size: 12px;
             }
         }
     </style>
@@ -122,15 +126,19 @@
 
 <body>
     <div id="chat-app">
-        <div id="app-name">Chit Chat</div>
-        <div id="chat-container">
-            <ul id="messages"></ul>
-        </div>
-        <div id="input-section">
-            <input id="usernameInput" type="text" placeholder="Your name">
-            <input id="inputMessage" type="text" placeholder="Type your message">
-            <button id="sendButton">Send</button>
-        </div>
+        <aside>
+            <div id="app-name">Chit Chat</div>
+        </aside>
+        <main>
+            <div id="chat-container">
+                <ul id="messages"></ul>
+            </div>
+            <div id="input-section">
+                <input id="usernameInput" type="text" placeholder="Your name">
+                <input id="inputMessage" type="text" placeholder="Type your message">
+                <button id="sendButton">Send</button>
+            </div>
+        </main>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
