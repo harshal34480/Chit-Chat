@@ -2,10 +2,11 @@
 <html>
 
 <head>
-    <title>Chit Chat - Socket.IO Chat</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="sty.css"> -->
+    <title>Chit Chat</title>
     <style>
-        /* Reset some default styles */
-        
         body,
         ul {
             margin: 0;
@@ -14,10 +15,16 @@
         /* Base styles */
         
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             background-color: #0c0c0c;
             color: #fff;
             overflow: hidden;
+        }
+        
+        .container {
+            width: 800px;
+            margin: auto;
+            /* border: 1px solid red; */
         }
         
         #chat-app {
@@ -37,9 +44,12 @@
             flex: 1;
             padding: 20px;
             background-color: #1f1f1f;
-            border-radius: 10px 10px 0 0;
+            border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
+            scroll-behavior: smooth;
+            height: 500px;
+            border: 2px solid white;
         }
         /* Message list styles */
         
@@ -52,25 +62,28 @@
         li {
             margin-bottom: 10px;
             padding: 10px;
-            border-radius: 10px;
+            border-radius: 30px;
             background-color: #292929;
+            border: 2px solid orange;
         }
         /* Input section styles */
         
         #input-section {
             display: flex;
             align-items: center;
-            padding: 10px;
+            padding: 20px;
             background-color: #1f1f1f;
             border-radius: 0 0 10px 10px;
             box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.1);
+            border: 2px solid orange;
+            margin-top: 10px;
         }
         
         #usernameInput,
         #inputMessage {
             flex: 1;
             padding: 5px;
-            border: 1px solid #444;
+            border: 1px solid white;
             border-radius: 5px;
             font-size: 14px;
             color: #fff;
@@ -80,8 +93,8 @@
         
         #sendButton {
             padding: 5px 10px;
-            background-color: #3498db;
-            color: #fff;
+            background-color: #a2c7df;
+            color: #0e0d0d;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -93,52 +106,28 @@
         #sendButton:hover {
             background-color: #2680c1;
         }
-        /* Media queries for responsiveness */
-        
-        @media screen and (max-width: 768px) {
-            #app-name {
-                font-size: 24px;
-            }
-            #chat-container {
-                padding: 10px;
-            }
-            li {
-                padding: 8px;
-            }
-            #input-section {
-                flex-direction: column;
-                align-items: stretch;
-                padding: 8px;
-            }
-            #usernameInput,
-            #inputMessage {
-                padding: 5px;
-                font-size: 12px;
-                margin-bottom: 8px;
-            }
-            #sendButton {
-                padding: 5px 8px;
-                font-size: 12px;
-            }
-        }
     </style>
 </head>
 
 <body>
-    <div id="chat-app">
-        <aside>
-            <div id="app-name">Chit Chat</div>
-        </aside>
-        <main>
-            <div id="chat-container">
-                <ul id="messages"></ul>
-            </div>
-            <div id="input-section">
-                <input id="usernameInput" type="text" placeholder="Your name">
-                <input id="inputMessage" type="text" placeholder="Type your message">
-                <button id="sendButton">Send</button>
-            </div>
-        </main>
+    <div class="container">
+        <div id="chat-app">
+            <aside>
+                <div id="app-name">Chit Chat</div>
+            </aside>
+            <main>
+                <div class="container">
+                    <div id="chat-container">
+                        <ul id="messages"></ul>
+                    </div>
+                    <div id="input-section">
+                        <input id="usernameInput" type="text" placeholder="Your name">
+                        <input id="inputMessage" type="text" placeholder="Type your message">
+                        <button id="sendButton">Send</button>
+                    </div>
+                </div>
+            </main>
+        </div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -146,15 +135,55 @@
         const socket = io();
         let username = '';
 
-        document.getElementById('usernameInput').addEventListener('change', (event) => {
+        const emojiMap = {
+            react: "⚛️",
+            woah: "😲",
+            hey: "👋",
+            lol: "😂",
+            like: "🤍",
+            congratulations: "🎉",
+        };
+
+        document.getElementById('usernameInput').addEventListener('input', (event) => {
             username = event.target.value;
         });
 
         document.getElementById('sendButton').addEventListener('click', () => {
-            const message = document.getElementById('inputMessage').value;
-            if (message && username) {
-                socket.emit('message', `${username}: ${message}`);
-                document.getElementById('inputMessage').value = '';
+            const inputMessage = document.getElementById('inputMessage');
+            const message = inputMessage.value.toLowerCase();
+
+            if (message === '/help') {
+                const helpMessage = `Available commands: 
+                /help - Show available commands
+                /emoji - Show available emoji
+                /clear - Clear the chat`;
+                const li = document.createElement('li');
+                li.textContent = helpMessage;
+                li.style.fontStyle = 'italic';
+                li.style.color = 'gray';
+                messages.appendChild(li);
+            } else if (message === '/emoji') {
+                const emojiList = Object.keys(emojiMap).map(keyword => emojiMap[keyword]).join(' ');
+                const li = document.createElement('li');
+                li.textContent = `Available emoji: ${emojiList}`;
+                li.style.fontStyle = 'italic';
+                li.style.color = 'gray';
+                messages.appendChild(li);
+            } else if (message === '/clear') {
+                messages.innerHTML = '';
+            } else {
+                let emoji = '';
+
+                for (const keyword in emojiMap) {
+                    if (message.includes(keyword)) {
+                        emoji = emojiMap[keyword];
+                        break;
+                    }
+                }
+
+                const finalMessage = emoji ? `${username}: ${emoji}` : `${username}: ${message}`;
+                socket.emit('message', finalMessage);
+                inputMessage.value = '';
             }
         });
 
@@ -165,6 +194,7 @@
             messages.appendChild(li);
         });
     </script>
+
 </body>
 
 </html>

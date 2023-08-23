@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Chit Chat Door</title>
+</head>
+
+<body>
+    <div class="intro">
+        <div class="door-container">
+            <div class="door" id="door">
+                <div class="door-frame">
+                    <div class="door-handle"></div>
+                </div>
+            </div>
+        </div>
+        <h1>Chit Chat</h1>
+        <p>Your Gateway to Engaging Conversations!</p>
+    </div>
+
+    <script>
+        const door = document.getElementById('door');
+        door.addEventListener('click', () => {
+            door.classList.add('open');
+            setTimeout(() => {
+                window.location.href = 'index.html'; // Replace with your desired URL
+            }, 1000); // Adjust the delay time as needed
+        });
+    </script>
+</body>
+
+</html>
