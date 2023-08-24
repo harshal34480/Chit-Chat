@@ -200,8 +200,8 @@
                         <ul id="messages"></ul>
                     </div>
                     <div id="input-section">
-                        <input id="usernameInput" type="text" placeholder="Your name">
-                        <input id="inputMessage" type="text" placeholder="Type your message [/help]">
+                        <input id="usernameInput" type="text" placeholder="Your name" required>
+                        <input id="inputMessage" type="text" placeholder="Type your message [/help]" required>
                         <button id="sendButton">Send</button>
                     </div>
                 </div>
@@ -251,17 +251,27 @@
             } else if (message === '/clear') {
                 messages.innerHTML = '';
             } else {
-                let emoji = '';
+                const words = message.split(" "); // Split the message into words
+                let emojiMessage = '';
+                let foundEmoji = false;
 
-                for (const keyword in emojiMap) {
-                    if (message.includes(keyword)) {
-                        emoji = emojiMap[keyword];
-                        break;
+                words.forEach(word => {
+                    if (emojiMap[word]) {
+                        emojiMessage += emojiMap[word] + ' ';
+                        foundEmoji = true;
+                    } else {
+                        emojiMessage += word + ' ';
                     }
+                });
+
+                if (foundEmoji) {
+                    const finalMessage = `${username}: ${emojiMessage}`;
+                    socket.emit('message', finalMessage);
+                } else {
+                    const finalMessage = `${username}: ${message}`;
+                    socket.emit('message', finalMessage);
                 }
 
-                const finalMessage = emoji ? `${username}: ${emoji}` : `${username}: ${message}`;
-                socket.emit('message', finalMessage);
                 inputMessage.value = '';
             }
         });
